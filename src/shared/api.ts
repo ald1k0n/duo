@@ -17,6 +17,7 @@ api.interceptors.response.use(
 					refreshToken: token,
 				});
 				const access = data?.accessToken;
+				console.log(access);
 				useAuthStore.getState().updateToken(access);
 
 				const originalRequest = error.config;
@@ -28,7 +29,7 @@ api.interceptors.response.use(
 				return api(originalRequest);
 			} catch (error) {
 				useAuthStore.getState().logout();
-				return Promise.reject(error);
+				throw new Error(error as any);
 			}
 		}
 	}

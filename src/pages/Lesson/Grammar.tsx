@@ -1,11 +1,12 @@
 import { Button, Flex, Layout, notification, Space, Typography } from 'antd';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Progress } from 'antd';
 import { useModulesStore } from '@/shared/stores/useModulesStore';
 import { CloseOutlined } from '@ant-design/icons';
 import { useState, useEffect } from 'react';
 
 import { QuestionType } from '@/types';
+import { ModuleService } from '@/services';
 
 const answers: Record<QuestionType, Function> = {
 	MATCH: (answer: string) => answer.split(' '),
@@ -16,6 +17,8 @@ const answers: Record<QuestionType, Function> = {
 export default function Lesson() {
 	const { id } = useParams();
 	const { currentLesson } = useModulesStore();
+	const { state } = useLocation();
+
 	const [currentQuestion, setCurrentQuestion] = useState(0);
 
 	const [answerArray, setAnswerArray] = useState<string[]>([]);
@@ -23,11 +26,12 @@ export default function Lesson() {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		if (!currentLesson) {
+		if (!state && !currentLesson) {
 			navigate(-1);
 		}
-	}, [currentLesson]);
+	}, [currentLesson, state]);
 
+	const moduleService = new ModuleService();
 	const QuestionComponent: Record<QuestionType, Function> = {
 		MATCH: (currentLesson: any, currentQuestion: number) => {
 			return (
@@ -55,8 +59,12 @@ export default function Lesson() {
 			const options = currentLesson?.questions[currentQuestion]?.options;
 			const answer = currentLesson?.questions[currentQuestion]?.answer;
 
-			const handleAnswer = (userAns: string) => {
+			const handleAnswer = async (userAns: string) => {
 				if (currentLesson!.questions?.length - 1 === currentQuestion) {
+					await moduleService.passModule({
+						lessonIndex: state.lessonIdx,
+						moduleId: state.moduleData?.moduleId,
+					});
 					navigate(-1);
 				} else if (!(answer === userAns)) {
 					notification.error({
@@ -108,8 +116,12 @@ export default function Lesson() {
 		READING: () => <></>,
 	};
 
-	const handleCheck = () => {
+	const handleCheck = async () => {
 		if (currentLesson!.questions?.length - 1 === currentQuestion) {
+			await moduleService.passModule({
+				lessonIndex: state.lessonIdx,
+				moduleId: state.moduleData?.moduleId,
+			});
 			navigate(-1);
 		} else {
 			const userAnswer = answerArray.join(' ');
