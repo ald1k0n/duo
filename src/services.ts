@@ -33,11 +33,7 @@ class AuthService {
 }
 
 class ModuleService {
-	private axios: AxiosInstance;
-
-	constructor(axiosInstance: AxiosInstance) {
-		this.axios = axiosInstance;
-	}
+	private axios: AxiosInstance = api;
 
 	public async createModule(requestBody: Module): Promise<Module> {
 		const response = await this.axios.post<Module>('/modules', requestBody);
