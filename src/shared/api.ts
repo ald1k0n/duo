@@ -3,17 +3,29 @@ import axios from 'axios';
 import { useAuthStore } from './stores/useAuthStore';
 
 const api = axios.create({
-	baseURL: 'http://25.21.101.93:8000',
+	baseURL: 'http://25.21.101.93:8080',
 });
 
 api.interceptors.response.use(
 	(response) => response,
-	(error) => {
+	async (error) => {
 		const status = error?.response?.status;
 		if (status === 401) {
 			try {
 				const token = useAuthStore.getState().refresh;
-				const response = api.post('/auth/refresh');
+				const { data } = await api.post('/auth/refresh', {
+					refreshToken: token,
+				});
+				const access = data?.accessToken;
+				useAuthStore.getState().updateToken(access);
+
+				const originalRequest = error.config;
+
+				originalRequest.headers[
+					'Authorization'
+				] = `Bearer ${data?.accessToken}`;
+
+				return api(originalRequest);
 			} catch (error) {
 				useAuthStore.getState().logout();
 				return Promise.reject(error);
@@ -21,3 +33,4 @@ api.interceptors.response.use(
 		}
 	}
 );
+export default api;
