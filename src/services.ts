@@ -1,16 +1,16 @@
-import { AxiosInstance } from 'axios';
+import {AxiosInstance} from 'axios';
 import {
-	LoginRequest,
-	JwtResponse,
-	RefreshRequest,
 	CreateUserRequest,
 	GetUserResponse,
+	JwtResponse,
+	LoginRequest,
 	Module,
 	PassModuleParams,
+	RefreshRequest,
 } from './types';
 import api from './shared/api';
 
-import { useAuthStore } from './shared/stores/useAuthStore';
+import {useAuthStore} from './shared/stores/useAuthStore';
 
 class AuthService {
 	private axios: AxiosInstance = api;
@@ -68,10 +68,21 @@ class UserService {
 		const response = await this.axios.get<GetUserResponse>('/users/me');
 		const data = response.data;
 
-		useAuthStore.getState().setUser(data as any);
+		useAuthStore.getState().setUser({id: data.id, email: data.email, password: ''});
 
 		return data;
 	}
 }
 
-export { AuthService, ModuleService, UserService };
+class AudioService {
+	private axios: AxiosInstance = api;
+
+	public async uploadAudio(file: Blob): Promise<string> {
+		const formData = new FormData();
+		formData.append('file', file);
+		const response = await this.axios.post<string>('/audio/upload', formData);
+		return response.data;
+	}
+}
+
+export { AuthService, ModuleService, UserService, AudioService };

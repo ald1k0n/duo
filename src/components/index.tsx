@@ -1,2 +1,6 @@
-export * from './Block';
-export * from './Disc';
+export {
+    Block
+} from './Block';
+export {
+    Disc
+} from './Disc';

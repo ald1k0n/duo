@@ -3,12 +3,13 @@ import { ModuleService } from '@/services';
 import { useAuthStore } from '@/shared/stores/useAuthStore';
 import { useModulesStore } from '@/shared/stores/useModulesStore';
 import { Flex, Layout, notification, Typography } from 'antd';
-import { useEffect, useState } from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
+import {Lesson} from "@/types.ts";
 
 export default function Grammar() {
-	const service = new ModuleService();
-	const [lessons, setLessons] = useState<any[]>([]);
+	const service = useMemo(() => new ModuleService(), []);
+	const [lessons, setLessons] = useState<Lesson[]>([]);
 	const [moduleData, setModuleData] = useState<any>(null);
 	const [isLoading, setIsLoading] = useState(true);
 	const { setCurrentLesson } = useModulesStore();
@@ -22,7 +23,9 @@ export default function Grammar() {
 				const lessonData = data?.find((d) => d.title === 'Grammar Module');
 
 				setModuleData(() => ({ moduleId: lessonData?.id }));
-				setLessons(lessonData?.lessons as any[]);
+				if (lessonData) {
+					setLessons(lessonData?.lessons);
+				}
 				setIsLoading(false);
 			} catch (error) {
 				setIsLoading(false);
@@ -33,7 +36,7 @@ export default function Grammar() {
 				});
 			}
 		})();
-	}, []);
+	}, [service]);
 
 	if (isLoading) {
 		return <div>Loading...</div>;
@@ -78,7 +81,7 @@ export default function Grammar() {
 							}}>
 							<Disc
 								title={lesson.title}
-								isDone={lesson.passedStudentIds.includes(user?.id)}
+								isDone={!!user && !!user.id && lesson.passedStudentIds.includes(user.id)}
 							/>
 						</div>
 					</Flex>

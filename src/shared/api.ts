@@ -27,9 +27,13 @@ api.interceptors.response.use(
 				] = `Bearer ${data?.accessToken}`;
 
 				return api(originalRequest);
-			} catch (error) {
+			} catch (error : unknown) {
 				useAuthStore.getState().logout();
-				throw new Error(error as any);
+				if (error instanceof Error) {
+					throw error;
+				} else {
+					throw new Error(`An unexpected error occurred: ${String(error)}`);
+				}
 			}
 		}
 	}

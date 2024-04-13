@@ -20,7 +20,7 @@ interface IStore {
 
 export const useAuthStore = create(
 	persist<IStore>(
-		(set, get) => ({
+		(set) => ({
 			isLoading: false,
 			user: null,
 			token: null,

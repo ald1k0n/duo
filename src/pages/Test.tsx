@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { AudioRecorder } from 'react-audio-voice-recorder';
+import {AudioRecorder} from 'react-audio-voice-recorder';
+import {AudioService} from "@/services.ts";
+import {useMemo} from "react";
 
 export default function Test() {
+	const audioService = useMemo(() => new AudioService(), []);
 	// const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
 
 	// useEffect(() => {
@@ -33,20 +34,11 @@ export default function Test() {
 
 	// 		audio.onended = () => URL.revokeObjectURL(audioUrl);
 	// 	}
-	// };
 
 	const addAudioElement = async (blob: Blob) => {
-		// const url = URL.createObjectURL(blob);
-		const formData = new FormData();
-		formData.append('file', blob);
-		await axios
-			.post('http://10.101.21.210:8080/audio/upload', formData)
+		await audioService.uploadAudio(blob)
 			.then(console.log)
 			.catch(console.error);
-		// const audio = document.createElement('audio');
-		// audio.src = url;
-		// audio.controls = true;
-		// document.body.appendChild(audio);
 	};
 
 	return (
