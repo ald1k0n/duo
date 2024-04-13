@@ -43,7 +43,7 @@ export default function Grammar() {
 			className='mt-4'
 			style={{
 				backgroundColor: '#A3C644',
-				height: 'calc(100vh - 80px)',
+				minHeight: 'calc(100vh - 80px)',
 			}}>
 			<div className='w-full md:w-[400px] mx-auto px-3 mt-2'>
 				{lessons?.map((lesson, index) => (

@@ -14,6 +14,12 @@ const answers: Record<QuestionType, Function> = {
 	READING: (answer: any) => answer,
 };
 
+const questionTitle: Record<QuestionType, string> = {
+	MATCH: 'Дұрыс ретте толтырыңыз',
+	MCQ: 'Дұрысын таңдаңыз',
+	READING: '',
+};
+
 export default function Lesson() {
 	const { id } = useParams();
 	const { currentLesson } = useModulesStore();
@@ -142,7 +148,7 @@ export default function Lesson() {
 			const similarity = calculateJaccardSimilarity(userAnswer, currentAnswer!);
 
 			// Check if similarity is at least 50%
-			const isMatch = similarity >= 0.5;
+			const isMatch = similarity >= 0.7;
 
 			if (!isMatch) {
 				notification.error({
@@ -159,10 +165,11 @@ export default function Lesson() {
 	return (
 		<Layout
 			style={{
-				height: 'calc(100vh - 72px)',
+				minHeight: 'calc(100vh - 72px)',
 			}}
-			className='bg-[#A3C644] text-white'>
+			className='bg-[#A3C644] text-white min-h-screen'>
 			<Flex
+				className='h-full'
 				justify='space-between'
 				align='center'>
 				<Button
@@ -171,7 +178,9 @@ export default function Lesson() {
 				/>
 				<Progress
 					showInfo={false}
-					percent={(currentQuestion / currentLesson?.questions?.length) * 100}
+					percent={
+						(currentQuestion / (currentLesson?.questions?.length - 1)) * 100
+					}
 				/>
 			</Flex>
 			<Flex
@@ -186,8 +195,10 @@ export default function Lesson() {
 					level={2}>
 					{id}
 				</Typography.Title>
-				<div className='w-full text-center text-white'>
-					<div className='text-lg'>Current Question: {currentQuestion}</div>
+				<div className='w-full text-white'>
+					<div className='text-lg font-semibold px-3'>
+						{questionTitle[currentLesson?.questions?.[currentQuestion]?.type!]}
+					</div>
 				</div>
 				<Flex
 					vertical
