@@ -8,9 +8,9 @@ type IProps = {
 
 export const Disc: FC<IProps> = ({ title, isDone }) => {
 	return (
-		<div className='relative'>
+		<div className='relative cursor-pointer'>
 			<Card
-				className={`bg-gray-600 rounded-full w-[69px] h-[65px] md:w-[140px] md:h-[112px] shadow-xl flex justify-center items-center`}
+				className={`bg-gray-600 rounded-full  w-[69px] h-[65px] md:w-[140px] md:h-[112px] shadow-xl flex justify-center items-center`}
 				style={{ zIndex: 1 }}></Card>
 			<Card
 				className={`${

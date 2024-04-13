@@ -1,19 +1,23 @@
 import { Disc } from '@/components';
 import { ModuleService } from '@/services';
+import { useModulesStore } from '@/shared/stores/useModulesStore';
 import { Flex, Layout, notification } from 'antd';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Grammar() {
 	const service = new ModuleService();
 	const [lessons, setLessons] = useState<any[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
+	const navigate = useNavigate();
+	const { setCurrentLesson } = useModulesStore();
 
 	useEffect(() => {
 		(async () => {
 			try {
 				const data = await service.getAllModules();
 				// setData(data[1].lessons);
-				setLessons(data[1] as any[]);
+				setLessons(data[1].lessons as unknown[]);
 				setIsLoading(false);
 			} catch (error) {
 				setIsLoading(false);
@@ -29,6 +33,7 @@ export default function Grammar() {
 	if (isLoading) {
 		return <div>Loading...</div>;
 	}
+
 	return (
 		<Layout
 			className='mt-4'
@@ -36,14 +41,18 @@ export default function Grammar() {
 				backgroundColor: '#A3C644',
 			}}>
 			<div className='w-full md:w-[400px] mx-auto px-3 mt-2'>
-				{lessons.map((_, index) => (
+				{lessons?.map((lesson, index) => (
 					<Flex
 						key={index}
 						wrap='wrap'
 						justify={index === 0 ? 'center' : index % 2 === 1 ? 'end' : 'start'}
 						gap={16}
+						onClick={() => {
+							setCurrentLesson(lesson);
+							navigate(`./${lesson.title}`);
+						}}
 						style={{ marginBottom: 16 }}>
-						<Disc title='popa' />
+						<Disc title={lesson.title} />
 					</Flex>
 				))}
 			</div>

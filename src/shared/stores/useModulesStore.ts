@@ -1,12 +1,18 @@
+import { Lesson, Module } from '@/types';
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 
 interface IStore {
-	getModules: () => Promise<any>;
+	currentLesson: Pick<Lesson, 'questions'> | null;
 }
 
-export const useModulesStore = create<IStore>()(
+interface IAction {
+	setCurrentLesson: (payload: Pick<Lesson, 'questions'> | null) => void;
+}
+
+export const useModulesStore = create<IStore & IAction>()(
 	immer((set) => ({
-		async getModules() {},
+		currentLesson: null,
+		setCurrentLesson: (payload) => set({ currentLesson: payload }),
 	}))
 );
