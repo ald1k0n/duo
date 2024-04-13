@@ -10,7 +10,8 @@ interface IStore {
 	user: IUser | null;
 	isLoading: boolean;
 	token: string | null;
-	setUser: (user: IUser, token: string) => void;
+	refresh: string | null;
+	setUser: (user: IUser, token: string, refresh?: string) => void;
 	logout: () => void;
 }
 
@@ -20,8 +21,9 @@ export const useAuthStore = create(
 			isLoading: false,
 			user: null,
 			token: null,
-			setUser(user, token) {
-				set({ user, token });
+			refresh: null,
+			setUser(user, token, refresh) {
+				set({ user, token, refresh });
 			},
 			logout: () => set({ user: null, token: null }),
 		}),

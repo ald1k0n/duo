@@ -12,7 +12,7 @@ api.interceptors.response.use(
 		const status = error?.response?.status;
 		if (status === 401) {
 			try {
-				const token = useAuthStore.getState().token;
+				const token = useAuthStore.getState().refresh;
 			} catch (error) {
 				useAuthStore.getState().logout();
 				return Promise.reject(error);
