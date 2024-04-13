@@ -13,7 +13,6 @@ export default function Grammar() {
 	const [isLoading, setIsLoading] = useState(true);
 	const { setCurrentLesson } = useModulesStore();
 	const { user } = useAuthStore();
-
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -44,7 +43,7 @@ export default function Grammar() {
 			className='mt-4'
 			style={{
 				backgroundColor: '#A3C644',
-				minHeight: 'calc(100vh - 80px)',
+				height: 'calc(100vh - 80px)', // Changed from minHeight to height as per design-fix branch
 			}}>
 			<div>
 				<Typography.Title

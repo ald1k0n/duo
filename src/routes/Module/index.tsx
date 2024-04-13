@@ -5,6 +5,7 @@ const Grammar = lazy(() => import('@/pages/Module/Grammar'));
 const Reading = lazy(() => import('@/pages/Module/Reading'));
 const Speaking = lazy(() => import('@/pages/Module/Speaking'));
 const GrammarLesson = lazy(() => import('@/pages/Lesson/Grammar'));
+const ReadingLesson = lazy(() => import('@/pages/Lesson/Reading'));
 
 const Routes: RouteObject[] = [
 	{
@@ -18,6 +19,10 @@ const Routes: RouteObject[] = [
 	{
 		path: '/module/reading',
 		element: <Reading />,
+	},
+	{
+		path: '/module/reading/:id',
+		element: <ReadingLesson />,
 	},
 	{
 		path: '/module/speaking',
