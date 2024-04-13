@@ -23,10 +23,17 @@ export interface RefreshRequest {
     refreshToken: string;
 }
 
+export enum QuestionType {
+    MCQ = 'MCQ',
+    MATCH = 'MATCH',
+    READING = 'READING',
+}
+
 export interface Question {
     question: string;
     options: string[];
-    answer: number;
+    answer: string;
+    type: QuestionType;
 }
 
 export interface Lesson {
