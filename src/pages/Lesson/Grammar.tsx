@@ -1,22 +1,12 @@
-import {
-	Button,
-	Flex,
-	Layout,
-	notification,
-	Space,
-	Spin,
-	Typography,
-} from 'antd';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { Progress } from 'antd';
-import { useModulesStore } from '@/shared/stores/useModulesStore';
-import { AudioOutlined, CloseOutlined } from '@ant-design/icons';
-import {useState, useEffect, useMemo} from 'react';
-import { AudioRecorder } from 'react-audio-voice-recorder';
+import {Button, Flex, Layout, notification, Progress, Space, Spin, Typography,} from 'antd';
+import {useLocation, useNavigate, useParams} from 'react-router-dom';
+import {useModulesStore} from '@/shared/stores/useModulesStore';
+import {CloseOutlined, MutedOutlined} from '@ant-design/icons';
+import {useEffect, useMemo, useState} from 'react';
+import {AudioRecorder} from 'react-audio-voice-recorder';
 
-import { QuestionType } from '@/types';
+import {QuestionType} from '@/types';
 import {AudioService, ModuleService, TtsService} from '@/services';
-import axios from 'axios';
 
 const answers: Record<QuestionType, Function> = {
 	MATCH: (answer: string) => answer.split(' '),
@@ -47,7 +37,7 @@ export default function Lesson() {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		if (!state && !currentLesson) {
+		if (!state || !currentLesson) {
 			navigate(-1);
 		}
 	}, [currentLesson, navigate, state]);
@@ -76,7 +66,7 @@ export default function Lesson() {
 				}
 			})();
 		}
-	}, [currentQuestion, state]);
+	}, [currentLesson?.questions, currentQuestion, state, ttsService]);
 
 	const moduleService = new ModuleService();
 	const QuestionComponent: Record<QuestionType, Function> = {
@@ -206,7 +196,7 @@ export default function Lesson() {
 				}
 			};
 			return (
-				<>
+				<div className='w-full flex justify-center'>
 					<AudioRecorder
 						onRecordingComplete={addAudioElement}
 						audioTrackConstraints={{
@@ -215,7 +205,7 @@ export default function Lesson() {
 						}}
 						downloadFileExtension='wav'
 					/>
-				</>
+				</div>
 			);
 		},
 	};
@@ -244,22 +234,7 @@ export default function Lesson() {
 		),
 		MCQ: () => <></>,
 		READING: () => <></>,
-		AUDIO: () => (
-			<>
-				<Button
-					disabled={!audioBlob}
-					icon={<AudioOutlined />}
-					onClick={() => {
-						const audio = new Audio();
-						const audioUrl = URL.createObjectURL(audioBlob!);
-						audio.src = audioUrl;
-						audio.play();
-						audio.onended = () => URL.revokeObjectURL(audioUrl);
-					}}>
-					Play Audio
-				</Button>
-			</>
-		),
+		AUDIO: () => <></>,
 	};
 
 	const handleCheck = async () => {
@@ -344,10 +319,31 @@ export default function Lesson() {
 					vertical
 					className='px-3 text-xl'>
 					<div className='w-full px-3 py-4 border-white border-2 rounded-lg '>
+						{currentLesson?.questions?.[currentQuestion]?.type === 'AUDIO' && (
+							<Button
+								size='large'
+								type='text'
+								disabled={!audioBlob}
+								icon={
+									<MutedOutlined
+										className='text-white'
+										color='white'
+									/>
+								}
+								onClick={() => {
+									const audio = new Audio();
+									const audioUrl = URL.createObjectURL(audioBlob!);
+									audio.src = audioUrl;
+									audio.play();
+									audio.onended = () => URL.revokeObjectURL(audioUrl);
+								}}
+							/>
+						)}
+
 						{currentLesson?.questions[currentQuestion]?.question}
 					</div>
 
-					{AnswerComponents[
+					{AnswerComponents?.[
 						currentLesson?.questions?.[currentQuestion]?.type!
 					]()}
 
