@@ -23,6 +23,10 @@ const Routes: RouteObject[] = [
 		path: '/module/speaking',
 		element: <Speaking />,
 	},
+	{
+		path: '/module/speaking/:id',
+		element: <GrammarLesson />,
+	},
 ];
 
 export default Routes;

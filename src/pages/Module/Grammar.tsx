@@ -2,7 +2,7 @@ import { Disc } from '@/components';
 import { ModuleService } from '@/services';
 import { useAuthStore } from '@/shared/stores/useAuthStore';
 import { useModulesStore } from '@/shared/stores/useModulesStore';
-import { Flex, Layout, notification } from 'antd';
+import { Flex, Layout, notification, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -20,9 +20,10 @@ export default function Grammar() {
 		(async () => {
 			try {
 				const data = await service.getAllModules();
-				// setData(data[1].lessons);
-				setModuleData(() => ({ moduleId: data[1]?.id }));
-				setLessons(data[1].lessons as any[]);
+				const lessonData = data?.find((d) => d.title === 'Grammar Module');
+
+				setModuleData(() => ({ moduleId: lessonData?.id }));
+				setLessons(lessonData?.lessons as any[]);
 				setIsLoading(false);
 			} catch (error) {
 				setIsLoading(false);
@@ -45,6 +46,16 @@ export default function Grammar() {
 				backgroundColor: '#A3C644',
 				minHeight: 'calc(100vh - 80px)',
 			}}>
+			<div>
+				<Typography.Title
+					className='text-center'
+					level={3}
+					style={{
+						color: 'white',
+					}}>
+					Grammar Module
+				</Typography.Title>
+			</div>
 			<div className='w-full md:w-[400px] mx-auto px-3 mt-2'>
 				{lessons?.map((lesson, index) => (
 					<Flex
@@ -59,18 +70,17 @@ export default function Grammar() {
 								},
 							});
 						}}
-						justify={"center"}
+						justify={'center'}
 						gap={16}
 						style={{ marginBottom: 16 }}>
-							<div
-              style={{
-                transform: `translateX(${calculateTransitionPx(index)}px)`,
-              }}
-            >
-						<Disc
-							title={lesson.title}
-							isDone={lesson.passedStudentIds.includes(user?.id)}
-						/>
+						<div
+							style={{
+								transform: `translateX(${calculateTransitionPx(index)}px)`,
+							}}>
+							<Disc
+								title={lesson.title}
+								isDone={lesson.passedStudentIds.includes(user?.id)}
+							/>
 						</div>
 					</Flex>
 				))}
@@ -80,6 +90,6 @@ export default function Grammar() {
 }
 
 function calculateTransitionPx(index: number) {
-  const radius = 100;
-  return radius * Math.sin((index * Math.PI) / 3.2);
+	const radius = 100;
+	return radius * Math.sin((index * Math.PI) / 3.2);
 }

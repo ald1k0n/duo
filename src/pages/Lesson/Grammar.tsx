@@ -1,23 +1,35 @@
-import { Button, Flex, Layout, notification, Space, Typography } from 'antd';
+import {
+	Button,
+	Flex,
+	Layout,
+	notification,
+	Space,
+	Spin,
+	Typography,
+} from 'antd';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Progress } from 'antd';
 import { useModulesStore } from '@/shared/stores/useModulesStore';
-import { CloseOutlined } from '@ant-design/icons';
+import { AudioOutlined, CloseOutlined } from '@ant-design/icons';
 import { useState, useEffect } from 'react';
+import { AudioRecorder } from 'react-audio-voice-recorder';
 
 import { QuestionType } from '@/types';
 import { ModuleService } from '@/services';
+import axios from 'axios';
 
 const answers: Record<QuestionType, Function> = {
 	MATCH: (answer: string) => answer.split(' '),
 	MCQ: (answer: any) => answer,
 	READING: (answer: any) => answer,
+	AUDIO: (answer: any) => answer,
 };
 
 const questionTitle: Record<QuestionType, string> = {
 	MATCH: 'Дұрыс ретте толтырыңыз',
 	MCQ: 'Дұрысын таңдаңыз',
 	READING: '',
+	AUDIO: 'Tynda',
 };
 
 export default function Lesson() {
@@ -25,8 +37,9 @@ export default function Lesson() {
 	const { currentLesson } = useModulesStore();
 	const { state } = useLocation();
 
+	const [sending, setSending] = useState(false);
 	const [currentQuestion, setCurrentQuestion] = useState(0);
-
+	const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
 	const [answerArray, setAnswerArray] = useState<string[]>([]);
 
 	const navigate = useNavigate();
@@ -36,6 +49,35 @@ export default function Lesson() {
 			navigate(-1);
 		}
 	}, [currentLesson, state]);
+
+	useEffect(() => {
+		if (state?.isAudio) {
+			setSending(true);
+			const currentText = currentLesson?.questions[currentQuestion].question;
+
+			(async () => {
+				try {
+					const response = await axios.get(
+						`http://10.101.21.210:8000/api/text2speech?text=${currentText}`,
+						{ responseType: 'blob' }
+					);
+					if (response.data instanceof Blob) {
+						setAudioBlob(response.data);
+						setSending(false);
+					} else {
+						console.error('Response data is not a Blob:', response.data);
+						setSending(false);
+					}
+				} catch (error) {
+					notification.error({
+						message: 'Error happened',
+						duration: 5,
+						placement: 'topRight',
+					});
+				}
+			})();
+		}
+	}, [currentQuestion, state]);
 
 	const moduleService = new ModuleService();
 	const QuestionComponent: Record<QuestionType, Function> = {
@@ -94,6 +136,93 @@ export default function Lesson() {
 			));
 		},
 		READING: () => <></>,
+		AUDIO: () => {
+			function levenshteinDistance(s: string, t: string): number {
+				const m = s.length;
+				const n = t.length;
+				const d: number[][] = [];
+
+				// Step 1: Create a matrix
+				for (let i = 0; i <= m; i++) {
+					d[i] = Array(n + 1).fill(0);
+					d[i][0] = i; // deletion
+				}
+				for (let j = 0; j <= n; j++) {
+					d[0][j] = j; // insertion
+				}
+
+				// Step 2: Fill the matrix
+				for (let j = 1; j <= n; j++) {
+					for (let i = 1; i <= m; i++) {
+						const cost = s[i - 1] === t[j - 1] ? 0 : 1;
+
+						d[i][j] = Math.min(
+							d[i - 1][j] + 1, // deletion
+							d[i][j - 1] + 1, // insertion
+							d[i - 1][j - 1] + cost // substitution
+						);
+					}
+				}
+
+				return d[m][n];
+			}
+
+			function similarityPercentage(
+				original: string,
+				userString: string
+			): number {
+				const distance = levenshteinDistance(original, userString);
+				const maxLength = Math.max(original.length, userString.length);
+				return (1 - distance / maxLength) * 100;
+			}
+
+			const addAudioElement = async (blob: Blob) => {
+				const formData = new FormData();
+				formData.append('file', blob);
+				setSending(true);
+				try {
+					const response = await axios.post(
+						'http://10.101.21.210:8080/audio/upload',
+						formData
+					);
+					const whisper = response.data.replace('[kk] ', '');
+					const question = currentLesson?.questions[
+						currentQuestion
+					]?.question?.replace(',', '');
+					const percent =
+						similarityPercentage(whisper, question!).toFixed(2) + '%';
+					notification.success({
+						message: `Your answer ${percent} correct`,
+						duration: 5,
+						placement: 'topRight',
+					});
+					setSending(false);
+					if (currentLesson!.questions?.length - 1 === currentQuestion) {
+						await moduleService.passModule({
+							lessonIndex: state.lessonIdx,
+							moduleId: state.moduleData?.moduleId,
+						});
+						navigate(-1);
+					} else setCurrentQuestion((prev) => prev + 1);
+				} catch (error) {
+					setSending(false);
+
+					console.error(error);
+				}
+			};
+			return (
+				<>
+					<AudioRecorder
+						onRecordingComplete={addAudioElement}
+						audioTrackConstraints={{
+							noiseSuppression: true,
+							echoCancellation: true,
+						}}
+						downloadFileExtension='wav'
+					/>
+				</>
+			);
+		},
 	};
 
 	const AnswerComponents: Record<QuestionType, Function> = {
@@ -120,6 +249,22 @@ export default function Lesson() {
 		),
 		MCQ: () => <></>,
 		READING: () => <></>,
+		AUDIO: () => (
+			<>
+				<Button
+					disabled={!audioBlob}
+					icon={<AudioOutlined />}
+					onClick={() => {
+						const audio = new Audio();
+						const audioUrl = URL.createObjectURL(audioBlob!);
+						audio.src = audioUrl;
+						audio.play();
+						audio.onended = () => URL.revokeObjectURL(audioUrl);
+					}}>
+					Play Audio
+				</Button>
+			</>
+		),
 	};
 
 	const handleCheck = async () => {
@@ -226,6 +371,10 @@ export default function Lesson() {
 					)}
 				</Flex>
 			</Flex>
+			<Spin
+				spinning={sending}
+				fullscreen
+			/>
 		</Layout>
 	);
 }

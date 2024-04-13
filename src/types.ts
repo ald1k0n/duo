@@ -23,7 +23,7 @@ export interface RefreshRequest {
 	refreshToken: string;
 }
 
-export type QuestionType = 'MCQ' | 'MATCH' | 'READING';
+export type QuestionType = 'MCQ' | 'MATCH' | 'READING' | 'AUDIO';
 
 export interface Question {
 	question: string;
