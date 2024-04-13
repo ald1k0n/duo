@@ -59,16 +59,27 @@ export default function Grammar() {
 								},
 							});
 						}}
-						justify={index === 0 ? 'center' : index % 2 === 1 ? 'end' : 'start'}
+						justify={"center"}
 						gap={16}
 						style={{ marginBottom: 16 }}>
+							<div
+              style={{
+                transform: `translateX(${calculateTransitionPx(index)}px)`,
+              }}
+            >
 						<Disc
 							title={lesson.title}
 							isDone={lesson.passedStudentIds.includes(user?.id)}
 						/>
+						</div>
 					</Flex>
 				))}
 			</div>
 		</Layout>
 	);
+}
+
+function calculateTransitionPx(index: number) {
+  const radius = 100;
+  return radius * Math.sin((index * Math.PI) / 3.2);
 }
