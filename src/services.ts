@@ -1,4 +1,4 @@
-import {AxiosInstance} from 'axios';
+import axios, {AxiosInstance} from 'axios';
 import {
 	CreateUserRequest,
 	GetUserResponse,
@@ -85,4 +85,26 @@ class AudioService {
 	}
 }
 
-export { AuthService, ModuleService, UserService, AudioService };
+class TtsService {
+	private axiosInstance: AxiosInstance;
+
+	constructor() {
+		const VOICE_API_URL = import.meta.env.VITE_VOICE_API_URL;
+		if (!VOICE_API_URL) {
+			throw new Error('VOICE_API_URL is not defined');
+		}
+		this.axiosInstance = axios.create({
+			baseURL: VOICE_API_URL,
+		});
+	}
+
+	public async textToSpeech(text: string): Promise<Blob> {
+		const response = await this.axiosInstance.get<Blob>('/text2speech', {
+			params: { text },
+			responseType: 'blob',
+		});
+		return response.data;
+	}
+}
+
+export { AuthService, ModuleService, UserService, AudioService, TtsService };

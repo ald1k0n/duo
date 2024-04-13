@@ -11,11 +11,11 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Progress } from 'antd';
 import { useModulesStore } from '@/shared/stores/useModulesStore';
 import { AudioOutlined, CloseOutlined } from '@ant-design/icons';
-import { useState, useEffect } from 'react';
+import {useState, useEffect, useMemo} from 'react';
 import { AudioRecorder } from 'react-audio-voice-recorder';
 
 import { QuestionType } from '@/types';
-import { ModuleService } from '@/services';
+import {AudioService, ModuleService, TtsService} from '@/services';
 import axios from 'axios';
 
 const answers: Record<QuestionType, Function> = {
@@ -33,6 +33,8 @@ const questionTitle: Record<QuestionType, string> = {
 };
 
 export default function Lesson() {
+	const audioService = useMemo(() => new AudioService(), []);
+	const ttsService = useMemo(() => new TtsService(), []);
 	const { id } = useParams();
 	const { currentLesson } = useModulesStore();
 	const { state } = useLocation();
@@ -48,7 +50,7 @@ export default function Lesson() {
 		if (!state && !currentLesson) {
 			navigate(-1);
 		}
-	}, [currentLesson, state]);
+	}, [currentLesson, navigate, state]);
 
 	useEffect(() => {
 		if (state?.isAudio) {
@@ -57,17 +59,14 @@ export default function Lesson() {
 
 			(async () => {
 				try {
-					const response = await axios.get(
-						`http://10.101.21.210:8000/api/text2speech?text=${currentText}`,
-						{ responseType: 'blob' }
-					);
-					if (response.data instanceof Blob) {
-						setAudioBlob(response.data);
+					if (!currentText) {
+						console.error('Current text is empty');
 						setSending(false);
-					} else {
-						console.error('Response data is not a Blob:', response.data);
-						setSending(false);
+						return;
 					}
+                    const audioBlob = await ttsService.textToSpeech(currentText);
+                    setAudioBlob(audioBlob);
+                    setSending(false);
 				} catch (error) {
 					notification.error({
 						message: 'Error happened',
@@ -86,7 +85,7 @@ export default function Lesson() {
 				<div className='w-full px-3 py-4 flex flex-wrap gap-3'>
 					{
 						//@ts-ignore
-						answers?.[currentLesson?.questions?.[currentQuestion]?.type!](
+						answers?.[currentLesson?.questions?.[currentQuestion]?.type](
 							currentLesson?.questions?.[currentQuestion]?.answer
 						)?.map((text: string) => (
 							<Button
@@ -177,15 +176,11 @@ export default function Lesson() {
 			}
 
 			const addAudioElement = async (blob: Blob) => {
-				const formData = new FormData();
-				formData.append('file', blob);
+
 				setSending(true);
 				try {
-					const response = await axios.post(
-						'http://10.101.21.210:8080/audio/upload',
-						formData
-					);
-					const whisper = response.data.replace('[kk] ', '');
+					const response = await audioService.uploadAudio(blob);
+					const whisper = response.replace('[kk] ', '');
 					const question = currentLesson?.questions[
 						currentQuestion
 					]?.question?.replace(',', '');

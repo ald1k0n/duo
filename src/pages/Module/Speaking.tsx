@@ -5,11 +5,14 @@ import { useModulesStore } from '@/shared/stores/useModulesStore';
 import { Flex, Layout, notification, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {Lesson} from "@/types.ts";
 
 export default function Speaking() {
 	const service = new ModuleService();
-	const [lessons, setLessons] = useState<any[]>([]);
-	const [moduleData, setModuleData] = useState<any>(null);
+	const [lessons, setLessons] = useState<Lesson[]>([]);
+	const [moduleData, setModuleData] = useState<{
+		moduleId: string;
+	} | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
 	const { setCurrentLesson } = useModulesStore();
 	const { user } = useAuthStore();
@@ -21,8 +24,10 @@ export default function Speaking() {
 			try {
 				const data = await service.getAllModules();
 				const lessonData = data?.find((d) => d.title === 'Speech Module');
-				setModuleData(() => ({ moduleId: lessonData?.id }));
-				setLessons(lessonData?.lessons as any[]);
+				if (lessonData) {
+					setLessons(lessonData.lessons);
+					setModuleData(() => ({ moduleId: lessonData.id }));
+				}
 				setIsLoading(false);
 			} catch (error) {
 				setIsLoading(false);
@@ -33,7 +38,7 @@ export default function Speaking() {
 				});
 			}
 		})();
-	}, []);
+	}, [service]);
 	if (isLoading) {
 		return <div>Loading...</div>;
 	}
@@ -76,7 +81,7 @@ export default function Speaking() {
 							}}>
 							<Disc
 								title={lesson.title}
-								isDone={lesson.passedStudentIds.includes(user?.id)}
+								isDone={!!user && !!user.id && lesson.passedStudentIds.includes(user.id)}
 							/>
 						</div>
 					</Flex>
