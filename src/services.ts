@@ -1,6 +1,5 @@
-import axios, { AxiosInstance } from 'axios';
-import { LoginRequest, JwtResponse, RefreshRequest } from './interfaces';
-import { CreateUserRequest, GetUserResponse, Module, PassModuleParams } from './types';
+import { AxiosInstance } from 'axios';
+import { LoginRequest, JwtResponse, RefreshRequest, CreateUserRequest, GetUserResponse, Module, PassModuleParams } from './types';
 
 class AuthService {
     private axios: AxiosInstance;
