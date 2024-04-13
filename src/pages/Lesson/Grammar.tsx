@@ -10,9 +10,10 @@ import {
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Progress } from 'antd';
 import { useModulesStore } from '@/shared/stores/useModulesStore';
-import { AudioOutlined, CloseOutlined } from '@ant-design/icons';
-import { useState, useEffect } from 'react';
+import { AudioOutlined, CloseOutlined, MutedOutlined } from '@ant-design/icons';
+import { useState, useEffect, useRef } from 'react';
 import { AudioRecorder } from 'react-audio-voice-recorder';
+import Talisman from '/assets/Talisman.svg';
 
 import { QuestionType } from '@/types';
 import { ModuleService } from '@/services';
@@ -45,7 +46,7 @@ export default function Lesson() {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		if (!state && !currentLesson) {
+		if (!state || !currentLesson) {
 			navigate(-1);
 		}
 	}, [currentLesson, state]);
@@ -210,8 +211,9 @@ export default function Lesson() {
 					console.error(error);
 				}
 			};
+
 			return (
-				<>
+				<div className='w-full flex justify-center'>
 					<AudioRecorder
 						onRecordingComplete={addAudioElement}
 						audioTrackConstraints={{
@@ -220,7 +222,7 @@ export default function Lesson() {
 						}}
 						downloadFileExtension='wav'
 					/>
-				</>
+				</div>
 			);
 		},
 	};
@@ -249,22 +251,7 @@ export default function Lesson() {
 		),
 		MCQ: () => <></>,
 		READING: () => <></>,
-		AUDIO: () => (
-			<>
-				<Button
-					disabled={!audioBlob}
-					icon={<AudioOutlined />}
-					onClick={() => {
-						const audio = new Audio();
-						const audioUrl = URL.createObjectURL(audioBlob!);
-						audio.src = audioUrl;
-						audio.play();
-						audio.onended = () => URL.revokeObjectURL(audioUrl);
-					}}>
-					Play Audio
-				</Button>
-			</>
-		),
+		AUDIO: () => <></>,
 	};
 
 	const handleCheck = async () => {
@@ -349,10 +336,31 @@ export default function Lesson() {
 					vertical
 					className='px-3 text-xl'>
 					<div className='w-full px-3 py-4 border-white border-2 rounded-lg '>
+						{currentLesson?.questions?.[currentQuestion]?.type === 'AUDIO' && (
+							<Button
+								size='large'
+								type='text'
+								disabled={!audioBlob}
+								icon={
+									<MutedOutlined
+										className='text-white'
+										color='white'
+									/>
+								}
+								onClick={() => {
+									const audio = new Audio();
+									const audioUrl = URL.createObjectURL(audioBlob!);
+									audio.src = audioUrl;
+									audio.play();
+									audio.onended = () => URL.revokeObjectURL(audioUrl);
+								}}
+							/>
+						)}
+
 						{currentLesson?.questions[currentQuestion]?.question}
 					</div>
 
-					{AnswerComponents[
+					{AnswerComponents?.[
 						currentLesson?.questions?.[currentQuestion]?.type!
 					]()}
 
