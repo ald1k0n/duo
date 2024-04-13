@@ -54,7 +54,7 @@ export default function Home() {
         justify="space-evenly"
         align="center"
         className="fixed bottom-0 w-full bg-white border-t border-gray-200 h-20 rounded-full"
-        style={{ backgroundColor: "#39C2D7" }}
+        style={{ backgroundColor: "#39C2D7", border: "none" }}
       >
         <Link to="/profile">
           <Button type="text">
@@ -65,7 +65,7 @@ export default function Home() {
         <div
           className="rounded-full w-24 h-24 flex justify-center items-center"
           style={{
-            backgroundColor: "white",
+            backgroundColor: "#A3C644",
             transform: "translateY(-3rem)",
           }}
         >
