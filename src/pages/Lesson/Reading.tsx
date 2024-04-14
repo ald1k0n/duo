@@ -69,7 +69,7 @@ export default function Lesson() {
           navigate(-1);
         } else if (!(answer === userAns)) {
           notification.error({
-            message: "Oh oh, you have a mistake",
+            message: "Сіз қателестініз",
             duration: 5,
             placement: "topRight",
           });
@@ -149,7 +149,7 @@ export default function Lesson() {
 
       if (!isMatch) {
         notification.error({
-          message: "Oh oh, you have a mistake",
+          message: "Сіз қателестініз",
           duration: 5,
           placement: "topRight",
         });
@@ -209,7 +209,10 @@ export default function Lesson() {
 
           {currentQuestion === 0 && (
             <Space>
-              <Button onClick={() => setCurrentQuestion((prev) => prev + 1)} type="default">
+              <Button
+                onClick={() => setCurrentQuestion((prev) => prev + 1)}
+                type="default"
+              >
                 Continue
               </Button>
             </Space>

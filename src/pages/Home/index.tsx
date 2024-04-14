@@ -12,11 +12,11 @@ export default function Home() {
 	const navigate = useNavigate();
 
 	return (
-		<Layout className='min-h-screen w-full lg:w-[1140px] mx-auto bg-[#39C2D7]'>
+		<Layout className='min-h-screen mx-auto bg-[#39C2D7] flex flex-col'>
 			<Flex
 				justify='space-between'
 				align='center'
-				className='h-16 px-3'>
+				className='h-16 px-3 w-full'>
 				<Link to='/'>
 					<Typography
 						className='uppercase text-3xl text-[#464547]'
