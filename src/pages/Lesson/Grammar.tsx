@@ -15,6 +15,7 @@ import {
 	MutedOutlined,
 	HeartOutlined,
 	HeartFilled,
+	SoundOutlined,
 } from '@ant-design/icons';
 import { useEffect, useMemo, useState } from 'react';
 import { AudioRecorder } from 'react-audio-voice-recorder';
@@ -384,16 +385,25 @@ export default function Lesson() {
 				<Flex
 					vertical
 					className='px-3 text-xl'>
-					<div className='w-full px-3 py-4 border-white border-2 rounded-lg '>
+					<div className='w-full flex justify-center'>
 						{currentLesson?.questions?.[currentQuestion]?.type === 'AUDIO' && (
 							<Button
 								size='large'
-								type='text'
+								type='default'
+								className='my-5 !rounded-2xl'
+								style={{
+									width: 122,
+									height: 122,
+									backgroundColor: '#8E244D',
+								}}
 								disabled={!audioBlob}
 								icon={
-									<MutedOutlined
+									<SoundOutlined
 										className='text-white'
 										color='white'
+										style={{
+											fontSize: 72,
+										}}
 									/>
 								}
 								onClick={() => {
@@ -405,7 +415,8 @@ export default function Lesson() {
 								}}
 							/>
 						)}
-
+					</div>
+					<div className='w-full px-3 py-4 border-white border-2 rounded-lg '>
 						{currentLesson?.questions[currentQuestion]?.question}
 					</div>
 
