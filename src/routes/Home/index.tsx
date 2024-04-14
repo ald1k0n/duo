@@ -1,8 +1,9 @@
 import { lazy } from 'react';
 
 const Landing = lazy(() => import('@/pages/Home/Landing'));
-const Register = lazy(() => import('@/pages/Register'));
 const Profile = lazy(() => import('@/pages/Home/Profile'));
+
+const Speaking = lazy(() => import('@/pages/Module/Speaking'));
 
 const Routes = [
 	{
@@ -11,7 +12,7 @@ const Routes = [
 	},
 	{
 		path: '/register',
-		element: <Register />,
+		element: <Speaking />,
 	},
 	{
 		path: '/profile',

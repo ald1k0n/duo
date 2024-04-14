@@ -4,16 +4,8 @@ import { Block } from '@/components';
 
 const Blocks = [
 	{
-		path: '/module/speaking',
-		title: 'Speaking',
-	},
-	{
-		path: '/module/grammar',
-		title: 'Grammar',
-	},
-	{
-		path: '/module/reading',
-		title: 'Reading',
+		path: '/module/test',
+		title: 'Start',
 	},
 ];
 

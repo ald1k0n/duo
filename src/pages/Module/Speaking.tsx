@@ -5,7 +5,7 @@ import { useModulesStore } from '@/shared/stores/useModulesStore';
 import { Flex, Layout, notification, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {Lesson} from "@/types.ts";
+import { Lesson } from '@/types.ts';
 
 export default function Speaking() {
 	const service = new ModuleService();
@@ -23,11 +23,19 @@ export default function Speaking() {
 		(async () => {
 			try {
 				const data = await service.getAllModules();
-				const lessonData = data?.find((d) => d.title === 'Speech Module');
+
+				const lessonData = data?.map((d) => {
+					const lessonsWithModuleId = d.lessons.map((lesson) => ({
+						...lesson,
+						moduleId: d.id,
+					}));
+					return lessonsWithModuleId;
+				});
+
 				if (lessonData) {
-					setLessons(lessonData.lessons);
-					setModuleData(() => ({ moduleId: lessonData.id }));
+					setLessons(lessonData.flat());
 				}
+
 				setIsLoading(false);
 			} catch (error) {
 				setIsLoading(false);
@@ -38,7 +46,8 @@ export default function Speaking() {
 				});
 			}
 		})();
-	}, [service]);
+	}, []);
+
 	if (isLoading) {
 		return <div>Loading...</div>;
 	}
@@ -47,7 +56,7 @@ export default function Speaking() {
 			className='mt-4'
 			style={{
 				backgroundColor: '#A3C644',
-				minHeight: 'calc(100vh - 80px)',
+				minHeight: 'calc(100vh + 30vh)',
 			}}>
 			<Typography.Title
 				className='text-center'
@@ -55,7 +64,7 @@ export default function Speaking() {
 				style={{
 					color: 'white',
 				}}>
-				Speech Module
+				Level 1
 			</Typography.Title>
 			<div className='w-full md:w-[400px] mx-auto px-3 mt-2'>
 				{lessons?.map((lesson, index) => (
@@ -66,7 +75,9 @@ export default function Speaking() {
 							setCurrentLesson(lesson);
 							navigate(`./${lesson.title}`, {
 								state: {
-									moduleData,
+									moduleData: {
+										moduleId: lesson.moduleId,
+									},
 									lessonIdx: index,
 									isAudio: true,
 								},
@@ -81,7 +92,11 @@ export default function Speaking() {
 							}}>
 							<Disc
 								title={lesson.title}
-								isDone={!!user && !!user.id && lesson.passedStudentIds.includes(user.id)}
+								isDone={
+									!!user &&
+									!!user.id &&
+									lesson.passedStudentIds?.includes(user.id)
+								}
 							/>
 						</div>
 					</Flex>

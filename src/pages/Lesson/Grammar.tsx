@@ -1,12 +1,21 @@
-import {Button, Flex, Layout, notification, Progress, Space, Spin, Typography,} from 'antd';
-import {useLocation, useNavigate, useParams} from 'react-router-dom';
-import {useModulesStore} from '@/shared/stores/useModulesStore';
-import {CloseOutlined, MutedOutlined} from '@ant-design/icons';
-import {useEffect, useMemo, useState} from 'react';
-import {AudioRecorder} from 'react-audio-voice-recorder';
+import {
+	Button,
+	Flex,
+	Layout,
+	notification,
+	Progress,
+	Space,
+	Spin,
+	Typography,
+} from 'antd';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useModulesStore } from '@/shared/stores/useModulesStore';
+import { CloseOutlined, MutedOutlined } from '@ant-design/icons';
+import { useEffect, useMemo, useState } from 'react';
+import { AudioRecorder } from 'react-audio-voice-recorder';
 
-import {QuestionType} from '@/types';
-import {AudioService, ModuleService, TtsService} from '@/services';
+import { QuestionType } from '@/types';
+import { AudioService, ModuleService, TtsService } from '@/services';
 
 const answers: Record<QuestionType, Function> = {
 	MATCH: (answer: string) => answer.split(' '),
@@ -43,7 +52,7 @@ export default function Lesson() {
 	}, [currentLesson, navigate, state]);
 
 	useEffect(() => {
-		if (state?.isAudio) {
+		if (currentLesson?.questions[currentQuestion]?.type === 'AUDIO') {
 			setSending(true);
 			const currentText = currentLesson?.questions[currentQuestion].question;
 
@@ -54,9 +63,9 @@ export default function Lesson() {
 						setSending(false);
 						return;
 					}
-                    const audioBlob = await ttsService.textToSpeech(currentText);
-                    setAudioBlob(audioBlob);
-                    setSending(false);
+					const audioBlob = await ttsService.textToSpeech(currentText);
+					setAudioBlob(audioBlob);
+					setSending(false);
 				} catch (error) {
 					notification.error({
 						message: 'Error happened',
@@ -66,7 +75,7 @@ export default function Lesson() {
 				}
 			})();
 		}
-	}, [currentLesson?.questions, currentQuestion, state, ttsService]);
+	}, [currentQuestion, ttsService]);
 
 	const moduleService = new ModuleService();
 	const QuestionComponent: Record<QuestionType, Function> = {
@@ -166,7 +175,6 @@ export default function Lesson() {
 			}
 
 			const addAudioElement = async (blob: Blob) => {
-
 				setSending(true);
 				try {
 					const response = await audioService.uploadAudio(blob);
@@ -233,7 +241,13 @@ export default function Lesson() {
 			</div>
 		),
 		MCQ: () => <></>,
-		READING: () => <></>,
+		READING: () => (
+			<>
+				<Button onClick={() => setCurrentQuestion((prev) => prev + 1)}>
+					Continue
+				</Button>
+			</>
+		),
 		AUDIO: () => <></>,
 	};
 
@@ -280,7 +294,7 @@ export default function Lesson() {
 	return (
 		<Layout
 			style={{
-				minHeight: 'calc(100vh - 72px)',
+				minHeight: 'calc(100vh)',
 			}}
 			className='bg-[#A3C644] text-white min-h-screen'>
 			<Flex

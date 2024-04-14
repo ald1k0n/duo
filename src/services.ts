@@ -1,4 +1,4 @@
-import axios, {AxiosInstance} from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import {
 	CreateUserRequest,
 	GetUserResponse,
@@ -10,7 +10,7 @@ import {
 } from './types';
 import api from './shared/api';
 
-import {useAuthStore} from './shared/stores/useAuthStore';
+import { useAuthStore } from './shared/stores/useAuthStore';
 
 class AuthService {
 	private axios: AxiosInstance = api;
@@ -68,7 +68,9 @@ class UserService {
 		const response = await this.axios.get<GetUserResponse>('/users/me');
 		const data = response.data;
 
-		useAuthStore.getState().setUser({id: data.id, email: data.email, password: ''});
+		useAuthStore
+			.getState()
+			.setUser({ id: data.id, email: data.email, password: '' });
 
 		return data;
 	}
@@ -99,7 +101,7 @@ class TtsService {
 	}
 
 	public async textToSpeech(text: string): Promise<Blob> {
-		const response = await this.axiosInstance.get<Blob>('/text2speech', {
+		const response = await this.axiosInstance.get<Blob>('/api/text2speech', {
 			params: { text },
 			responseType: 'blob',
 		});
