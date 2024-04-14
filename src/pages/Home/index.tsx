@@ -4,6 +4,7 @@ import {
 	HomeOutlined,
 	UserOutlined,
 	UnorderedListOutlined,
+	RetweetOutlined,
 } from '@ant-design/icons';
 
 import { useAuthStore } from '@/shared/stores/useAuthStore';
@@ -76,13 +77,18 @@ export default function Home() {
 					</div>
 				</div>
 
-				<Link to='/'>
-					<Button type='text'>
-						<img
-							src='/assets/profile.svg'
-							alt='profile'
-						/>
-					</Button>
+				<Link to='/saved'>
+					<Button
+						type='text'
+						icon={
+							<RetweetOutlined
+								style={{
+									fontSize: 32,
+									color: 'white',
+								}}
+							/>
+						}
+					/>
 				</Link>
 			</Flex>
 		</Layout>
