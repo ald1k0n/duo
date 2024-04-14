@@ -1,5 +1,6 @@
 import { Button, Flex, Layout, Space, Typography } from 'antd';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { RetweetOutlined } from '@ant-design/icons';
 
 import { SignIn } from '@/components/Auth/SignIn';
 import { useAuthStore } from '@/shared/stores/useAuthStore';
@@ -89,13 +90,18 @@ export default function Home() {
 					</div>
 				</div>
 
-				<Link to='/'>
-					<Button type='text'>
-						<img
-							src='/assets/profile.svg'
-							alt='profile'
-						/>
-					</Button>
+				<Link to='/saved'>
+					<Button
+						type='text'
+						icon={
+							<RetweetOutlined
+								style={{
+									fontSize: 32,
+									color: 'white',
+								}}
+							/>
+						}
+					/>
 				</Link>
 			</Flex>
 			{open && (
