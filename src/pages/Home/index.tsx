@@ -47,7 +47,7 @@ export default function Home() {
 				className='fixed bottom-0 w-full bg-white border-t border-gray-200 h-20 rounded-t-[3rem] left-0'
 				style={{ backgroundColor: '#39C2D7', border: 'none' }}>
 				<Link to='/profile'>
-					<Button type='text'>
+					<Button type='link'>
 						<img
 							src='/assets/profile.svg'
 							alt='profile'
@@ -66,7 +66,7 @@ export default function Home() {
 						style={{
 							backgroundColor: '#39C2D7',
 						}}>
-						<Link to='/'>
+						<Link type='link' to='/'>
 							<img
 								src='/assets/yurt.svg'
 								alt='yurt'
@@ -79,7 +79,7 @@ export default function Home() {
 					className='w-16'
 					to='/saved'>
 					<Button
-						type='text'
+						type='link'
 						icon={
 							<RetweetOutlined
 								style={{

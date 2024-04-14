@@ -1,3 +1,4 @@
+import Conference from '@/pages/Module/Conference';
 import { lazy } from 'react';
 
 const Profile = lazy(() => import('@/pages/Home/Profile'));
@@ -14,6 +15,10 @@ const Routes = [
 	{
 		path: '/:id',
 		element: <Lesson />,
+	},
+	{
+		path: "/conference",
+		element: <Conference />,
 	},
 	{
 		path: '/profile',
