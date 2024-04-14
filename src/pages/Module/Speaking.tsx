@@ -161,22 +161,35 @@ export default function Speaking() {
 							</div>
 						</Flex>
 						{lessons.length - 1 === index && (
-							<div className='w-full p-4 border-2 border-white rounded-xl text-white text-center my-5'>
-								<Typography.Title
-									level={2}
-									style={{
-										color: 'white',
-									}}>
-									Келесі деңгей
-								</Typography.Title>
-								<Typography.Text
-									style={{
-										color: 'white',
-										fontSize: 18,
-									}}>
-									Қазақ тілінде оңай темалар бойынша сөйлесуге үйреніңіз!{' '}
-								</Typography.Text>
-							</div>
+							<>
+								<div className='w-full p-4 border-2 border-white rounded-xl text-white text-center my-5'>
+									<Typography.Title
+										level={2}
+										style={{
+											color: 'white',
+										}}>
+										Келесі деңгей
+									</Typography.Title>
+									<Typography.Text
+										style={{
+											color: 'white',
+											fontSize: 18,
+										}}>
+										Қазақ тілінде оңай темалар бойынша сөйлесуге үйреніңіз!{' '}
+									</Typography.Text>
+									<br />
+									<Button
+										size='large'
+										className='mt-4 cursor-not-allowed'
+										style={{
+											backgroundColor: '#8E244D',
+											color: 'white',
+										}}
+										disabled>
+										Өту
+									</Button>
+								</div>
+							</>
 						)}
 					</>
 				))}
