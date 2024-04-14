@@ -62,7 +62,7 @@ export default function Speaking() {
 
 	return (
 		<Layout
-			className='mt-4'
+			className='pt-4'
 			style={{
 				backgroundColor: '#A3C644',
 				minHeight: 'calc(100vh + 30vh)',
@@ -75,7 +75,7 @@ export default function Speaking() {
 				}}>
 				1-ші деңгей
 			</Typography.Title>
-			<div className='w-full md:w-[400px] mx-auto px-3 mt-2'>
+			<div className='w-full md:w-[400px] mx-auto px-3 pt-2'>
 				{lessons?.map((lesson, index) => (
 					<>
 						<Flex
@@ -109,7 +109,10 @@ export default function Speaking() {
 															duration: 5,
 															placement: 'topRight',
 														});
-													} else {
+													} else if (index === lessons.length - 1) {
+                            setCurrentLesson(lesson);
+                            navigate(`/conference`);
+                          } else {
 														setCurrentLesson(lesson);
 														navigate(`./${lesson?.name}`, {
 															state: {
@@ -175,7 +178,7 @@ export default function Speaking() {
 											color: 'white',
 											fontSize: 18,
 										}}>
-										Қазақ тілінде оңай темалар бойынша сөйлесуге үйреніңіз!{' '}
+										Қазақ тілінде оңай тақырыптар бойынша сөйлесуге үйреніңіз!{' '}
 									</Typography.Text>
 									<br />
 									<Button

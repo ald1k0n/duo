@@ -7,7 +7,7 @@ export default function Conference() {
     <Layout
       style={{
         backgroundColor: "#A3C644",
-        height: "calc(100vh - 80px)",
+        height: "calc(100vh - 200px)",
       }}
     >
       <JitsiMeeting
