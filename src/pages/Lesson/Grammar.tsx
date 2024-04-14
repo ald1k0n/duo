@@ -10,12 +10,18 @@ import {
 } from 'antd';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useModulesStore } from '@/shared/stores/useModulesStore';
-import { CloseOutlined, MutedOutlined } from '@ant-design/icons';
+import {
+	CloseOutlined,
+	MutedOutlined,
+	HeartOutlined,
+	HeartFilled,
+} from '@ant-design/icons';
 import { useEffect, useMemo, useState } from 'react';
 import { AudioRecorder } from 'react-audio-voice-recorder';
 
 import { QuestionType } from '@/types';
 import { AudioService, ModuleService, TtsService } from '@/services';
+import { useSavedStore } from '@/shared/stores/useSavedStore';
 
 const answers: Record<QuestionType, Function> = {
 	MATCH: (answer: string) => answer.split(' '),
@@ -37,6 +43,8 @@ export default function Lesson() {
 	const { id } = useParams();
 	const { currentLesson } = useModulesStore();
 	const { state } = useLocation();
+
+	const { addToSave, removeFromSave, saved } = useSavedStore();
 
 	const [sending, setSending] = useState(false);
 	const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -310,6 +318,44 @@ export default function Lesson() {
 					percent={
 						(currentQuestion / (currentLesson?.questions?.length - 1)) * 100
 					}
+				/>
+				<Button
+					onClick={() => {
+						const idxOfSaved = saved?.findIndex(
+							(s) =>
+								s.question ===
+								currentLesson?.questions?.[currentQuestion]?.question
+						);
+
+						if (idxOfSaved === -1)
+							addToSave({
+								question: currentLesson?.questions?.[currentQuestion]?.question,
+								answer: currentLesson?.questions?.[currentQuestion]?.answer,
+							});
+						else {
+							removeFromSave(idxOfSaved);
+						}
+					}}
+					icon={
+						saved?.some(
+							(s) =>
+								s.question ===
+								currentLesson?.questions?.[currentQuestion]?.question
+						) ? (
+							<HeartFilled
+								style={{
+									color: 'red',
+								}}
+							/>
+						) : (
+							<HeartOutlined
+								style={{
+									color: 'white',
+								}}
+							/>
+						)
+					}
+					type='text'
 				/>
 			</Flex>
 			<Flex
