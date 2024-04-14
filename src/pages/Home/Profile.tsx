@@ -1,4 +1,4 @@
-import { CheckOutlined, FireOutlined } from '@ant-design/icons';
+import { CheckCircleFilled, CheckOutlined, FireFilled, FireOutlined } from '@ant-design/icons';
 import {
 	Avatar,
 	Button,
@@ -32,7 +32,7 @@ export default function Profile() {
 				form.resetFields();
 				setIsSignUp(false);
 				notification.success({
-					message: 'Success',
+					message: 'Сіз сәтті тіркелдіңіз',
 					duration: 5,
 					placement: 'topRight',
 				});
@@ -42,7 +42,7 @@ export default function Profile() {
 			}
 		} catch (error) {
 			notification.error({
-				message: 'Error happened',
+				message: 'Қате орын алды',
 				duration: 5,
 				placement: 'topRight',
 			});
@@ -67,7 +67,7 @@ export default function Profile() {
 						<div className='grid grid-cols-6 mb-4'>
 							<Avatar
 								size={80}
-								src='https://i.pravatar.cc/300'
+								src='https://viberatecdn.blob.core.windows.net/entity/artist/kairat-nurtas-p3k9O'
 								className='col-span-2'
 							/>
 							<div className='col-span-4'>
@@ -77,28 +77,22 @@ export default function Profile() {
 									{user.email.split('@')[0]}
 								</Typography.Title>
 								<Typography.Text>
-									Сіз тоқтаусыз 1 күн оқып жүрсіз. Барлығы 2 күн.
+									Сіз тоқтаусыз 5 күн оқып жүрсіз. Осы қарқында жалғастырыңыз 🔥
 								</Typography.Text>
 							</div>
 						</div>
-						<div className='grid grid-cols-3 gap-4'>
+						<div className='w-full flex gap-5'>
 							<Button
-								icon={<FireOutlined />}
-								className='border-2'
+								icon={<FireFilled />}
+								className='border-2 flex-1'
 								style={{ borderColor: '#39C2D7', color: '#39C2D7' }}>
-								1
+								5
 							</Button>
 							<Button
-								icon={<CheckOutlined />}
-								className='border-2'
+								icon={<CheckCircleFilled />}
+								className='border-2 flex-1'
 								style={{ borderColor: '#39C2D7', color: '#39C2D7' }}>
 								2
-							</Button>
-							<Button
-								type='primary'
-								className='border-2'
-								style={{ borderColor: '#39C2D7', backgroundColor: '#39C2D7' }}>
-								PLUS
 							</Button>
 						</div>
 					</>

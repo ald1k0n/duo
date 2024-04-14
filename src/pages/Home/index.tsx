@@ -1,15 +1,13 @@
-import { Layout, Flex, Button, Space, Typography } from 'antd';
+import { Button, Flex, Layout, Space, Typography } from 'antd';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
-import {
-	HomeOutlined,
-	UserOutlined,
-	UnorderedListOutlined,
-	RetweetOutlined,
-} from '@ant-design/icons';
+import { RetweetOutlined } from '@ant-design/icons';
 
+import { SignIn } from '@/components/Auth/SignIn';
 import { useAuthStore } from '@/shared/stores/useAuthStore';
+import { useState } from 'react';
 
 export default function Home() {
+	const [open, setOpen] = useState(false);
 	const { user, logout } = useAuthStore();
 	const navigate = useNavigate();
 
@@ -18,7 +16,7 @@ export default function Home() {
 			<Flex
 				justify='space-between'
 				align='center'
-				className='h-16'>
+				className='h-16 px-3'>
 				<Link to='/'>
 					<Typography
 						className='uppercase text-3xl text-[#464547]'
@@ -27,14 +25,29 @@ export default function Home() {
 					</Typography>
 				</Link>
 				<Space>
-					{user && (
+					{!user ? (
+						<>
+							<Button
+								size='large'
+								onClick={() => setOpen(true)}
+								type='primary'>
+								Кіру
+							</Button>
+							<Button
+								size='large'
+								onClick={() => navigate('/register')}
+								type='link'>
+								Тіркелу
+							</Button>
+						</>
+					) : (
 						<Button
 							onClick={() => {
 								logout();
 								navigate('/');
 							}}
 							type='default'>
-							Logout
+							Шығу
 						</Button>
 					)}
 				</Space>
@@ -46,7 +59,7 @@ export default function Home() {
 			<Flex
 				justify='space-evenly'
 				align='center'
-				className='fixed bottom-0 w-full bg-white border-t border-gray-200 h-20 rounded-full left-0'
+				className='fixed bottom-0 w-full bg-white border-t border-gray-200 h-20 rounded-t-[3rem] left-0'
 				style={{ backgroundColor: '#39C2D7', border: 'none' }}>
 				<Link to='/profile'>
 					<Button type='text'>
@@ -91,6 +104,12 @@ export default function Home() {
 					/>
 				</Link>
 			</Flex>
+			{open && (
+				<SignIn
+					open={open}
+					setOpen={setOpen}
+				/>
+			)}
 		</Layout>
 	);
 }

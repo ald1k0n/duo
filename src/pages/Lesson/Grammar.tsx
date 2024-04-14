@@ -32,9 +32,9 @@ const answers: Record<QuestionType, Function> = {
 
 const questionTitle: Record<QuestionType, string> = {
 	MATCH: 'Дұрыс ретте толтырыңыз',
-	MCQ: 'Дұрысын таңдаңыз',
-	READING: '',
-	AUDIO: 'Tynda',
+	MCQ: 'Дұрыс жауапты таңдаңыз',
+	READING: 'Мәтінді оқыңыз',
+	AUDIO: 'Аудионы мұқяит тыңдаңыз',
 };
 
 export default function Lesson() {
