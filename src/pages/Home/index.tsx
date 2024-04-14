@@ -12,7 +12,7 @@ export default function Home() {
 	const navigate = useNavigate();
 
 	return (
-		<Layout className='min-h-screen w-full lg:w-[1140px] mx-auto bg-white'>
+		<Layout className='min-h-screen w-full lg:w-[1140px] mx-auto bg-[#39C2D7]'>
 			<Flex
 				justify='space-between'
 				align='center'

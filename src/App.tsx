@@ -25,6 +25,7 @@ function App() {
 			colorLink: '#39c2d7',
 			colorLinkHover: '#464547',
 			colorInfo: '#39c2d7',
+			fontFamily: "Montserrat, sans-serif",
 		},
 	};
 
