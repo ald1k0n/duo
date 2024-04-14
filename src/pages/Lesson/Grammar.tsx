@@ -255,7 +255,7 @@ export default function Lesson() {
 				<Button
 					className='mt-3'
 					onClick={() => setCurrentQuestion((prev) => prev + 1)}>
-					Continue
+					Жағастыру
 				</Button>
 			</>
 		),
@@ -305,9 +305,9 @@ export default function Lesson() {
 	return (
 		<Layout
 			style={{
-				minHeight: 'calc(100vh + 900px)',
+				minHeight: 'calc(100vh - 70px)',
 			}}
-			className='bg-[#A3C644] text-white min-h-screen'>
+			className='bg-[#A3C644] text-white min-h-screen pb-40'>
 			<Flex
 				className='h-full'
 				justify='space-between'
