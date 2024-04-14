@@ -25,22 +25,7 @@ export default function Home() {
 					</Typography>
 				</Link>
 				<Space>
-					{!user ? (
-						<>
-							<Button
-								size='large'
-								onClick={() => setOpen(true)}
-								type='primary'>
-								Кіру
-							</Button>
-							<Button
-								size='large'
-								onClick={() => navigate('/register')}
-								type='link'>
-								Тіркелу
-							</Button>
-						</>
-					) : (
+					{!user && (
 						<Button
 							onClick={() => {
 								logout();
