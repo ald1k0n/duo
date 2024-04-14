@@ -177,7 +177,17 @@ export default function Speaking() {
 										fontSize: 18,
 									}}>
 									Қазақ тілінде оңай темалар бойынша сөйлесуге үйреніңіз!{' '}
-								</Typography.Text>
+								</Typography.Text><br />
+								<Button
+										size='large'
+										className='mt-4 cursor-not-allowed'
+										style={{
+											backgroundColor: '#8E244D',
+											color: 'white',
+										}}
+										disabled>
+										Өту
+									</Button>
 							</div>
 						)}
 					</>
