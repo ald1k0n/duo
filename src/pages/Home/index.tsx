@@ -25,7 +25,7 @@ export default function Home() {
 					</Typography>
 				</Link>
 				<Space>
-					{!user && (
+					{user && (
 						<Button
 							onClick={() => {
 								logout();
@@ -66,7 +66,9 @@ export default function Home() {
 						style={{
 							backgroundColor: '#39C2D7',
 						}}>
-						<Link type='link' to='/'>
+						<Link
+							type='link'
+							to='/'>
 							<img
 								src='/assets/yurt.svg'
 								alt='yurt'

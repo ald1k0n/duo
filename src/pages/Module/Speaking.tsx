@@ -59,7 +59,7 @@ export default function Speaking() {
 	if (isLoading) {
 		return <div>Loading...</div>;
 	}
-	// console.log(lessons);
+
 	return (
 		<Layout
 			className='mt-4'
@@ -131,7 +131,7 @@ export default function Speaking() {
 										type='link'
 										style={{ position: 'absolute' }}></Button>
 									<Disc
-										title={lesson.title}
+										title={lesson.name}
 										isDone={
 											!!user &&
 											!!user.id &&
