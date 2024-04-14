@@ -312,16 +312,20 @@ export default function Lesson() {
 				justify='space-between'
 				align='center'>
 				<Button
+					size='large'
+					onClick={() => navigate(-1)}
 					type='text'
 					icon={<CloseOutlined className='text-white' />}
 				/>
 				<Progress
+					size='default'
 					showInfo={false}
 					percent={
 						(currentQuestion / (currentLesson?.questions?.length - 1)) * 100
 					}
 				/>
 				<Button
+					size='large'
 					onClick={() => {
 						const idxOfSaved = saved?.findIndex(
 							(s) =>

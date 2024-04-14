@@ -90,7 +90,9 @@ export default function Home() {
 					</div>
 				</div>
 
-				<Link to='/saved'>
+				<Link
+					className='w-16'
+					to='/saved'>
 					<Button
 						type='text'
 						icon={
