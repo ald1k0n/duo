@@ -13,7 +13,7 @@ export const Disc: FC<IProps> = ({ title, isDone }) => {
 			<Card
 				className={`${
 					isDone ? 'bg-[#39c2d7]' : 'white'
-				} w-[100px] h-[64px] md:w-[140px] md:h-[90px] hover:bg-gray-300 shadow-xl flex justify-center items-center  top-[-8px] left-0 right-0 mx-auto`}
+				} w-[125px] h-[80px] md:w-[140px] md:h-[90px] hover:bg-gray-300 text-center shadow-xl flex justify-center items-center  top-[-8px] left-0 right-0 mx-auto`}
 				style={{
 					zIndex: 2,
 					border: 'none',

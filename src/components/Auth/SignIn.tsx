@@ -35,7 +35,7 @@ export const SignIn: FC<IProps> = ({ open, setOpen }) => {
 				form.resetFields();
 				setIsSignUp(false);
 				notification.success({
-					message: 'Success',
+					message: 'Сіз сәтті тіркелдіңіз',
 					duration: 5,
 					placement: 'topRight',
 				});
@@ -47,7 +47,7 @@ export const SignIn: FC<IProps> = ({ open, setOpen }) => {
 			}
 		} catch (error) {
 			notification.error({
-				message: 'Error happened',
+				message: 'Қате орын алды',
 				duration: 5,
 				placement: 'topRight',
 			});
@@ -77,7 +77,7 @@ export const SignIn: FC<IProps> = ({ open, setOpen }) => {
 					<Button
 						onClick={() => setIsSignUp(true)}
 						type='default'>
-						Register
+						Тіркелу
 					</Button>
 				</Flex>
 				<Layout className='bg-white'>
@@ -85,16 +85,16 @@ export const SignIn: FC<IProps> = ({ open, setOpen }) => {
 						<Typography.Title
 							className='text-center'
 							level={3}>
-							{isSignUp ? 'Register' : 'Login'}
+							{isSignUp ? 'Тіркелу' : 'Кіру'}
 						</Typography.Title>
 					</Flex>
 					<Form
-						className='w-96 mx-auto'
+						className='w-full mx-auto'
 						layout='vertical'
 						onFinish={handleFinish}
 						form={form}>
 						<Form.Item
-							label='Email'
+							label='Электрондық пошта'
 							name='email'>
 							<Input
 								size='large'
@@ -103,7 +103,7 @@ export const SignIn: FC<IProps> = ({ open, setOpen }) => {
 							/>
 						</Form.Item>
 						<Form.Item
-							label='Password'
+							label='Құпия сөз'
 							name='password'>
 							<Input
 								size='large'
@@ -114,7 +114,7 @@ export const SignIn: FC<IProps> = ({ open, setOpen }) => {
 						<Button
 							className='w-full'
 							htmlType='submit'>
-							{isSignUp ? 'Register' : 'Login'}
+							{isSignUp ? 'Тіркелу' : 'Кіру'}
 						</Button>
 					</Form>
 				</Layout>
@@ -122,7 +122,7 @@ export const SignIn: FC<IProps> = ({ open, setOpen }) => {
 					<Button
 						type='link'
 						onClick={() => setOpen(false)}>
-						<div className='w-96'>Exit</div>
+						<div className='w-96'>Бас тарту</div>
 					</Button>
 				</Space>
 			</Flex>

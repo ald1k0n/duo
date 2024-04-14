@@ -16,13 +16,13 @@ export default function Profile() {
         </Typography.Title>
         <div className="grid grid-cols-6 mb-4">
           <Avatar
-            size={80}
-            src="https://i.pravatar.cc/300"
+            size={100}
+            src="https://viberatecdn.blob.core.windows.net/entity/artist/kairat-nurtas-p3k9O"
             className="col-span-2"
           />
           <div className="col-span-4">
             <Typography.Title level={4} style={{ fontWeight: "bold" }}>
-              John Doe
+              Қайрат Нұртас
             </Typography.Title>
             <Typography.Text>
               Сіз тоқтаусыз 1 күн оқып жүрсіз. Барлығы 2 күн.
