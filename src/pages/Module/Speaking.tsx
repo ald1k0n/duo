@@ -59,10 +59,10 @@ export default function Speaking() {
 	if (isLoading) {
 		return <div>Loading...</div>;
 	}
-
+	// console.log(lessons);
 	return (
 		<Layout
-			className='pt-4'
+			className='mt-4'
 			style={{
 				backgroundColor: '#A3C644',
 				minHeight: 'calc(100vh + 30vh)',
@@ -75,7 +75,7 @@ export default function Speaking() {
 				}}>
 				1-ші деңгей
 			</Typography.Title>
-			<div className='w-full md:w-[400px] mx-auto px-3 pt-2'>
+			<div className='w-full md:w-[400px] mx-auto px-3 mt-2'>
 				{lessons?.map((lesson, index) => (
 					<>
 						<Flex
@@ -92,6 +92,26 @@ export default function Speaking() {
 											: 'translateX(0)',
 									width: (index + 1) % 3 === 0 ? '100%' : 'auto',
 								}}>
+								{(index) % 3 === 0 && (
+									<Card
+										style={{
+											width: '100%',
+											color: 'white',
+											fontWeight: 700,
+											fontSize: 16,
+											marginBottom: "2rem",
+											border: 'none',
+										}}
+										styles={{
+											body: {
+												backgroundColor: '#39C2D7',
+												width: '100%',
+												border: 'none',
+											},
+										}}>
+										{lesson.title}
+									</Card>
+								)}
 								<Popover
 									placement='bottom'
 									title={lesson?.name}
@@ -109,10 +129,7 @@ export default function Speaking() {
 															duration: 5,
 															placement: 'topRight',
 														});
-													} else if (index === lessons.length - 1) {
-                            setCurrentLesson(lesson);
-                            navigate(`/conference`);
-                          } else {
+													} else {
 														setCurrentLesson(lesson);
 														navigate(`./${lesson?.name}`, {
 															state: {
@@ -134,7 +151,7 @@ export default function Speaking() {
 										type='link'
 										style={{ position: 'absolute' }}></Button>
 									<Disc
-										title={lesson.name}
+										title={lesson.title}
 										isDone={
 											!!user &&
 											!!user.id &&
@@ -142,57 +159,26 @@ export default function Speaking() {
 										}
 									/>
 								</Popover>
-								{(index + 1) % 3 === 0 && (
-									<Card
-										style={{
-											width: '100%',
-											color: 'white',
-											fontWeight: 700,
-											fontSize: 16,
-											border: 'none',
-										}}
-										styles={{
-											body: {
-												backgroundColor: '#39C2D7',
-												width: '100%',
-												border: 'none',
-											},
-										}}>
-										{lesson.title}
-									</Card>
-								)}
+
 							</div>
 						</Flex>
 						{lessons.length - 1 === index && (
-							<>
-								<div className='w-full p-4 border-2 border-white rounded-xl text-white text-center my-5'>
-									<Typography.Title
-										level={2}
-										style={{
-											color: 'white',
-										}}>
-										Келесі деңгей
-									</Typography.Title>
-									<Typography.Text
-										style={{
-											color: 'white',
-											fontSize: 18,
-										}}>
-										Қазақ тілінде оңай тақырыптар бойынша сөйлесуге үйреніңіз!{' '}
-									</Typography.Text>
-									<br />
-									<Button
-										size='large'
-										className='mt-4 cursor-not-allowed'
-										style={{
-											backgroundColor: '#8E244D',
-											color: 'white',
-										}}
-										disabled>
-										Өту
-									</Button>
-								</div>
-							</>
+							<div className='w-full p-4 border-2 border-white rounded-xl text-white text-center my-5'>
+								<Typography.Title
+									level={2}
+									style={{
+										color: 'white',
+									}}>
+									Келесі деңгей
+								</Typography.Title>
+								<Typography.Text
+									style={{
+										color: 'white',
+										fontSize: 18,
+									}}>
+									Қазақ тілінде оңай темалар бойынша сөйлесуге үйреніңіз!{' '}
+								</Typography.Text>
+							</div>
 						)}
 					</>
 				))}
