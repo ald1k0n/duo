@@ -251,7 +251,9 @@ export default function Lesson() {
 		MCQ: () => <></>,
 		READING: () => (
 			<>
-				<Button onClick={() => setCurrentQuestion((prev) => prev + 1)}>
+				<Button
+					className='mt-3'
+					onClick={() => setCurrentQuestion((prev) => prev + 1)}>
 					Continue
 				</Button>
 			</>
@@ -302,7 +304,7 @@ export default function Lesson() {
 	return (
 		<Layout
 			style={{
-				minHeight: 'calc(100vh)',
+				minHeight: 'calc(100vh + 900px)',
 			}}
 			className='bg-[#A3C644] text-white min-h-screen'>
 			<Flex
