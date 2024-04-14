@@ -26,20 +26,7 @@ export default function Home() {
 					</Typography>
 				</Link>
 				<Space>
-					{!user ? (
-						<>
-							<Button
-								size='large'
-								type='primary'>
-								Login
-							</Button>
-							<Button
-								size='large'
-								type='link'>
-								Register
-							</Button>
-						</>
-					) : (
+					{user && (
 						<Button
 							onClick={() => {
 								logout();
