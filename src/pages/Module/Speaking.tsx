@@ -10,9 +10,7 @@ import { Lesson } from '@/types.ts';
 export default function Speaking() {
 	const service = new ModuleService();
 	const [lessons, setLessons] = useState<Lesson[]>([]);
-	const [moduleData, setModuleData] = useState<{
-		moduleId: string;
-	} | null>(null);
+
 	const [isLoading, setIsLoading] = useState(true);
 	const { setCurrentLesson } = useModulesStore();
 	const { user } = useAuthStore();
@@ -25,9 +23,10 @@ export default function Speaking() {
 				const data = await service.getAllModules();
 
 				const lessonData = data?.map((d) => {
-					const lessonsWithModuleId = d.lessons.map((lesson) => ({
+					const lessonsWithModuleId = d.lessons.map((lesson, idx) => ({
 						...lesson,
 						moduleId: d.id,
+						idx,
 					}));
 					return lessonsWithModuleId;
 				});
@@ -72,16 +71,24 @@ export default function Speaking() {
 						key={index}
 						wrap='wrap'
 						onClick={() => {
-							setCurrentLesson(lesson);
-							navigate(`./${lesson.title}`, {
-								state: {
-									moduleData: {
-										moduleId: lesson.moduleId,
+							if (!user) {
+								notification.info({
+									message: 'You must be authorized to start the lessson',
+									duration: 5,
+									placement: 'topRight',
+								});
+							} else {
+								setCurrentLesson(lesson);
+								navigate(`./${lesson.title}`, {
+									state: {
+										moduleData: {
+											moduleId: lesson.moduleId,
+										},
+										lessonIdx: lesson.idx,
+										isAudio: true,
 									},
-									lessonIdx: index,
-									isAudio: true,
-								},
-							});
+								});
+							}
 						}}
 						justify={'center'}
 						gap={16}

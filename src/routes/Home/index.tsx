@@ -1,18 +1,17 @@
 import { lazy } from 'react';
 
-const Landing = lazy(() => import('@/pages/Home/Landing'));
 const Profile = lazy(() => import('@/pages/Home/Profile'));
-
+const Lesson = lazy(() => import('@/pages/Lesson/Grammar'));
 const Speaking = lazy(() => import('@/pages/Module/Speaking'));
 
 const Routes = [
 	{
 		path: '',
-		element: <Landing />,
+		element: <Speaking />,
 	},
 	{
-		path: '/register',
-		element: <Speaking />,
+		path: '/:id',
+		element: <Lesson />,
 	},
 	{
 		path: '/profile',
